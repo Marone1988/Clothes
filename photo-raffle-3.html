@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Raffle Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f9fafb;
+            --text-primary: #1f2937;
+            --accent-color: #6366f1;
+            --accent-light: #a5b4fc;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .app-header h1 {
+            font-size: 2.25rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        .upload-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        #uploaded-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+
+        .image-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .image-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .image-card select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+        }
+
+        .result-section {
+            padding: 2rem;
+            text-align: center;
+            background-color: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        #result-image {
+            max-width: 500px;
+            max-height: 500px;
+            border-radius: 16px;
+            margin: 1rem 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: white;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 768px) {
+            .upload-section {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            #uploaded-images {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <h1>🎲 Photo Raffle Gallery</h1>
+        </div>
+
+        <div class="upload-section">
+            <div class="file-upload">
+                <button class="btn">
+                    📸 Upload Images
+                    <input type="file" id="image-upload" accept="image/*" multiple>
+                </button>
+            </div>
+            
+            <div>
+                <input type="text" id="new-category" placeholder="New Category" style="padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <button id="add-category-btn" class="btn btn-secondary">Add</button>
+            </div>
+        </div>
+
+        <div id="categories-container"></div>
+
+        <div id="uploaded-images"></div>
+
+        <div class="result-section">
+            <div>
+                <label for="category-select">Select Category:</label>
+                <select id="category-select" style="padding: 0.5rem; border-radius: 6px; margin: 0 1rem;"></select>
+                <button id="tirage-btn" class="btn" disabled>🎯 Raffle</button>
+            </div>
+            <img id="result-image" style="display:none;">
+            <p id="result-text" style="color: var(--accent-color); font-weight: 600;"></p>
+        </div>
+
+        <div class="action-buttons">
+            <button id="clear-all-btn" class="btn" style="background-color: #ef4444; color: white;">🗑️ Clear All</button>
+        </div>
+    </div>
+
+    <script>
+        // Le script JavaScript reste identique à la version précédente
+        // (Copier-coller le script de la version précédente)
+        const imageUpload = document.getElementById('image-upload');
+        const uploadedImages = document.getElementById('uploaded-images');
+        const categoriesContainer = document.getElementById('categories-container');
+        const newCategoryInput = document.getElementById('new-category');
+        const addCategoryBtn = document.getElementById('add-category-btn');
+        const categorySelect = document.getElementById('category-select');
+        const tirageBouton = document.getElementById('tirage-btn');
+        const resultImage = document.getElementById('result-image');
+        const resultText = document.getElementById('result-text');
+        const clearAllBtn = document.getElementById('clear-all-btn');
+
+        let imageCategories = JSON.parse(localStorage.getItem('imageCategories')) || {};
+
+        function saveToLocalStorage() {
+            localStorage.setItem('imageCategories', JSON.stringify(imageCategories));
+        }
+
+        function loadExistingCategories() {
+            categoriesContainer.innerHTML = '';
+            categorySelect.innerHTML = '';
+
+            Object.keys(imageCategories).forEach(categoryName => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.innerHTML = `<h3>${categoryName}</h3>`;
+                categoriesContainer.appendChild(categoryDiv);
+
+                const option = document.createElement('option');
+                option.value = categoryName;
+                option.textContent = categoryName;
+                categorySelect.appendChild(option);
+
+                imageCategories[categoryName].forEach(imageData => {
+                    createImageCard(imageData, categoryName);
+                });
+            });
+
+            tirageBouton.disabled = 
+                !Object.values(imageCategories).some(arr => arr.length > 0);
+        }
+
+        function createImageCard(imageData, selectedCategory) {
+            const imageCard = document.createElement('div');
+            imageCard.classList.add('image-card');
+
+            const img = document.createElement('img');
+            img.src = imageData;
+
+            const categorySelect = document.createElement('select');
+            categorySelect.innerHTML = 
+                Object.keys(imageCategories)
+                .map(cat => `<option value="${cat}" ${cat === selectedCategory ? 'selected' : ''}>${cat}</option>`)
+                .join('');
+
+            categorySelect.addEventListener('change', function() {
+                const oldCategory = selectedCategory;
+                const newCategory = this.value;
+
+                imageCategories[oldCategory] = 
+                    imageCategories[oldCategory].filter(img => img !== imageData);
+                
+                imageCategories[newCategory].push(imageData);
+
+                saveToLocalStorage();
+                loadExistingCategories();
+            });
+
+            imageCard.appendChild(img);
+            imageCard.appendChild(categorySelect);
+            uploadedImages.appendChild(imageCard);
+        }
+
+        addCategoryBtn.addEventListener('click', function() {
+            const categoryName = newCategoryInput.value.trim();
+            if (categoryName && !imageCategories[categoryName]) {
+                imageCategories[categoryName] = [];
+                
+                saveToLocalStorage();
+                loadExistingCategories();
+
+                newCategoryInput.value = '';
+            }
+        });
+
+        imageUpload.addEventListener('change', function(e) {
+            for (let file of e.target.files) {
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    if (Object.keys(imageCategories).length === 0) {
+                        imageCategories['Default'] = [];
+                        saveToLocalStorage();
+                    }
+
+                    const firstCategory = Object.keys(imageCategories)[0];
+                    imageCategories[firstCategory].push(event.target.result);
+                    
+                    saveToLocalStorage();
+                    loadExistingCategories();
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+
+        tirageBouton.addEventListener('click', function() {
+            const selectedCategory = categorySelect.value;
+            const categoryImages = imageCategories[selectedCategory];
+
+            if (categoryImages && categoryImages.length > 0) {
+                const randomIndex = Math.floor(Math.random() * categoryImages.length);
+                const selectedImage = categoryImages[randomIndex];
+
+                resultImage.src = selectedImage;
+                resultImage.style.display = 'block';
+                resultText.textContent = `Image tirée au sort dans la catégorie : ${selectedCategory}`;
+            } else {
+                resultText.textContent = 'Aucune image dans cette catégorie';
+                resultImage.style.display = 'none';
+            }
+        });
+
+        clearAllBtn.addEventListener('click', function() {
+            if (confirm('Voulez-vous vraiment supprimer toutes les images et catégories ?')) {
+                imageCategories = {};
+                localStorage.removeItem('imageCategories');
+                
+                uploadedImages.innerHTML = '';
+                categoriesContainer.innerHTML = '';
+                categorySelect.innerHTML = '';
+                tirageBouton.disabled = true;
+                resultImage.style.display = 'none';
+                resultText.textContent = '';
+            }
+        });
+
+        loadExistingCategories();
+    </script>
+</body>
+</html>
