@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion des Demandes de Moteurs Électriques</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="#fff" stroke-width="2.5"/>
+          <path d="M20 8 L24 16 L20 14 L16 22 L20 20 L16 30" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="20" r="4" fill="#f59e0b"/>
+        </svg>
+        <div>
+          <h1>Moteurs Électriques</h1>
+          <span>Service Électrique — Gestion des Demandes</span>
+        </div>
+      </div>
+      <nav class="nav-tabs">
+        <button class="tab-btn active" data-tab="nouvelle-demande">Nouvelle demande</button>
+        <button class="tab-btn" data-tab="suivi-demande">Suivi demande</button>
+        <button class="tab-btn" data-tab="admin">Administration</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ── TAB 1 : NOUVELLE DEMANDE ── -->
+    <section id="tab-nouvelle-demande" class="tab-content active">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-icon">📋</span>
+          <div>
+            <h2>Nouvelle demande de moteur</h2>
+            <p>Remplissez le formulaire ci-dessous pour soumettre votre demande.</p>
+          </div>
+        </div>
+        <form id="form-demande" novalidate>
+          <div class="form-grid">
+
+            <!-- Informations demandeur -->
+            <fieldset class="fieldset full-width">
+              <legend>Informations demandeur</legend>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="demandeur">Nom du demandeur <span class="req">*</span></label>
+                  <input type="text" id="demandeur" name="demandeur" placeholder="Prénom NOM" required />
+                </div>
+                <div class="form-group">
+                  <label for="service">Service <span class="req">*</span></label>
+                  <input type="text" id="service" name="service" placeholder="ex: Service Électrique" required />
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Type de demande -->
+            <fieldset class="fieldset full-width">
+              <legend>Type de demande</legend>
+              <div class="type-demande-choice">
+                <label class="radio-card" id="label-pose">
+                  <input type="radio" name="type_demande" value="pose" required />
+                  <div class="radio-card-inner">
+                    <span class="radio-icon">⚙️</span>
+                    <strong>Pose</strong>
+                    <small>Installation d'un nouveau moteur</small>
+                  </div>
+                </label>
+                <label class="radio-card" id="label-changement">
+                  <input type="radio" name="type_demande" value="changement" required />
+                  <div class="radio-card-inner">
+                    <span class="radio-icon">🔄</span>
+                    <strong>Changement</strong>
+                    <small>Remplacement d'un moteur existant</small>
+                  </div>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Localisation et équipement -->
+            <fieldset class="fieldset full-width">
+              <legend>Localisation & Équipement</legend>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="installation">Installation <span class="req">*</span></label>
+                  <input type="text" id="installation" name="installation" placeholder="ex: Atelier 3 — Ligne B" required />
+                </div>
+                <div class="form-group">
+                  <label for="equipement">Équipement <span class="req">*</span></label>
+                  <input type="text" id="equipement" name="equipement" placeholder="ex: Convoyeur principal" required />
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Caractéristiques du moteur -->
+            <fieldset class="fieldset full-width">
+              <legend>Caractéristiques du moteur demandé</legend>
+              <div class="form-row three-cols">
+                <div class="form-group">
+                  <label for="puissance">Puissance <span class="req">*</span></label>
+                  <div class="input-unit">
+                    <input type="text" id="puissance" name="puissance" placeholder="ex: 7.5" required />
+                    <span class="unit">kW</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="tension">Tension <span class="req">*</span></label>
+                  <div class="input-unit">
+                    <input type="text" id="tension" name="tension" placeholder="ex: 380" required />
+                    <span class="unit">V</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="vitesse">Vitesse <span class="req">*</span></label>
+                  <div class="input-unit">
+                    <input type="text" id="vitesse" name="vitesse" placeholder="ex: 1450" required />
+                    <span class="unit">tr/min</span>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Champs changement uniquement -->
+            <fieldset class="fieldset full-width" id="champs-changement" style="display:none">
+              <legend>Informations moteur à déposer</legend>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="matricule_moteur_depose">Matricule du moteur à déposer <span class="req">*</span></label>
+                  <input type="text" id="matricule_moteur_depose" name="matricule_moteur_depose"
+                         placeholder="ex: MT-2024-001" />
+                </div>
+                <div class="form-group">
+                  <label for="anomalie">Anomalie / Motif du changement <span class="req">*</span></label>
+                  <input type="text" id="anomalie" name="anomalie"
+                         placeholder="ex: Vibrations anormales, surchauffe..." />
+                </div>
+              </div>
+            </fieldset>
+
+          </div>
+
+          <div class="form-actions">
+            <button type="reset" class="btn btn-secondary">Réinitialiser</button>
+            <button type="submit" class="btn btn-primary">
+              <span class="btn-icon">📤</span> Soumettre la demande
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Confirmation -->
+      <div id="confirmation" class="confirmation hidden">
+        <div class="confirmation-icon">✅</div>
+        <h3>Demande soumise avec succès !</h3>
+        <p>Votre numéro de demande est :</p>
+        <div class="numero-demande" id="confirmation-numero"></div>
+        <p class="note">Conservez ce numéro pour suivre l'état de votre demande.</p>
+        <button class="btn btn-primary" id="btn-nouvelle">Nouvelle demande</button>
+      </div>
+    </section>
+
+    <!-- ── TAB 2 : SUIVI DEMANDE ── -->
+    <section id="tab-suivi-demande" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-icon">🔍</span>
+          <div>
+            <h2>Suivi de demandes</h2>
+            <p>Entrez votre nom pour consulter vos demandes et leur état.</p>
+          </div>
+        </div>
+        <div class="search-bar">
+          <input type="text" id="search-demandeur" placeholder="Votre nom (ex: Jean Dupont)" />
+          <button class="btn btn-primary" id="btn-rechercher">Rechercher</button>
+        </div>
+      </div>
+
+      <div id="resultats-suivi" class="resultats hidden">
+        <div id="liste-demandes-suivi"></div>
+      </div>
+
+      <div id="aucun-resultat" class="empty-state hidden">
+        <span>🔍</span>
+        <p>Aucune demande trouvée pour ce nom.</p>
+      </div>
+    </section>
+
+    <!-- ── TAB 3 : ADMINISTRATION ── -->
+    <section id="tab-admin" class="tab-content">
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-admin-tab="demandes-admin">Demandes</button>
+        <button class="admin-tab-btn" data-admin-tab="moteurs-admin">Moteurs déposés</button>
+      </div>
+
+      <!-- Sous-onglet Demandes -->
+      <div id="tab-demandes-admin" class="admin-tab-content active">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">📊</span>
+            <div>
+              <h2>Gestion des demandes</h2>
+              <p>Approuvez ou refusez les demandes du service électrique.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-refresh-demandes">↻ Actualiser</button>
+          </div>
+          <div class="filters">
+            <button class="filter-btn active" data-filter="tous">Toutes</button>
+            <button class="filter-btn" data-filter="envoye">Envoyées</button>
+            <button class="filter-btn" data-filter="approuve">Approuvées</button>
+            <button class="filter-btn" data-filter="refuse">Refusées</button>
+          </div>
+        </div>
+        <div id="liste-demandes-admin"></div>
+      </div>
+
+      <!-- Sous-onglet Moteurs -->
+      <div id="tab-moteurs-admin" class="admin-tab-content">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">🔧</span>
+            <div>
+              <h2>Suivi des moteurs déposés</h2>
+              <p>Gérez le statut de réparation des moteurs déposés.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-refresh-moteurs">↻ Actualiser</button>
+          </div>
+          <div class="filters">
+            <button class="filter-btn-m active" data-filter-m="tous">Tous</button>
+            <button class="filter-btn-m" data-filter-m="attente_envoi">En attente d'envoi</button>
+            <button class="filter-btn-m" data-filter-m="en_reparation">En réparation</button>
+            <button class="filter-btn-m" data-filter-m="repare">Réparés</button>
+          </div>
+        </div>
+        <div id="liste-moteurs-admin"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DÉTAIL DEMANDE -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal" id="modal-detail">
+      <button class="modal-close" id="modal-close">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
