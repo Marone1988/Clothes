@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>السروال المغربي الأصيل | الموضة التراثية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <style>
+        /* Fallback fonts while Google Fonts loads */
+        @font-face { font-family: 'Cairo'; src: local('Arial'); }
+        @font-face { font-family: 'Amiri'; src: local('Georgia'); }
+    </style>
     <style>
         :root {
             --green:  #1a6b3c;
